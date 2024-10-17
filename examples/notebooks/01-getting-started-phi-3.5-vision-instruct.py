@@ -1,7 +1,13 @@
 # Databricks notebook source
-# MAGIC %pip install mlflow-extensions
+# MAGIC %pip install mlflow-extensions openai
 # MAGIC %pip install -U mlflow
 # MAGIC dbutils.library.restartPython()
+
+# COMMAND ----------
+
+# TODO: Change the following to match your environment
+registered_model_name = "main.default.phi_3_5_vision"
+endpoint_name = "phi_3_5_vision_instruct_vllm"
 
 # COMMAND ----------
 
@@ -10,7 +16,7 @@ from mlflow_extensions.databricks.deploy.ez_deploy import EzDeploy
 
 deployer = EzDeploy(
   config=prebuilt.vision.vllm.PHI_3_5_VISION_INSTRUCT_12K,
-  registered_model_name="main.default.sri_phi_3_5_vision_instruct_12k"
+  registered_model_name=registered_model_name
 )
 
 # COMMAND ----------
@@ -23,7 +29,6 @@ deployer.register()
 
 # COMMAND ----------
 
-endpoint_name = "sri_phi_3_5_vision_instruct_vllm"
 deployer.deploy(endpoint_name)
 
 # COMMAND ----------
@@ -69,7 +74,6 @@ for model in client.models.list():
 #     boardwalk: bool
 #     grass: bool
 
-# while True:
 response = client.chat.completions.create(
   model=my_model,
   messages=[
